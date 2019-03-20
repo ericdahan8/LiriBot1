@@ -1,0 +1,28 @@
+{
+  "name": "LiriBot1",
+  "version": "1.0.0",
+  "description": "Liribot commandline interface using node",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ericdahan8/LiriBot1.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/ericdahan8/LiriBot1/issues"
+  },
+  "homepage": "https://github.com/ericdahan8/LiriBot1#readme",
+  "dependencies": {
+    "axios": "^0.18.0",
+    "bandsintown": "^1.0.1",
+    "dotenv": "^7.0.0",
+    "moment": "^2.24.0",
+    "node-spotify-api": "^1.0.7",
+    "omdb": "^0.8.0"
+  }
+}
