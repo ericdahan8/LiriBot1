@@ -2,14 +2,12 @@ require("dotenv").config();
 var keys = require("./keys.js");
 var axios = require("axios");
 var moment = require("moment");
+var fs = require("fs");
 console.log("API KEYS", keys);
 var Spotify = require("node-spotify-api");
 var spotify = new Spotify(keys.spotify);
 //////////////////////////////////
-//Dowhatitsaysfunction - reading command from the file
-var fs = require("fs");
-var dataArr;
-////command into process afgv
+////inputs into process afgv
 var inputs = process.argv[2];
 /////////////////////////////////
 //process the additonal arguments with a space e.g. post malone
@@ -20,10 +18,10 @@ for (var i = 3; i < process.argv.length; i++) {
 
 var Str = arguments.join(" ");
 ///////////////////////////////////////////////////////////////////////////////////////////
-///Change order and command name and arg string and spotifythissong
+/// Input function
 if (inputs === "spotify-") {
   spotifySong(Str);
-} else if (inputs === "concert-") {
+} else if (inputs === "concert-this") {
   concert(Str);
 } else if (inputs === "movie-") {
   movie(Str);
@@ -32,7 +30,7 @@ if (inputs === "spotify-") {
 } else {
   console.log("Invalid Input");
 }
-////////////////////////////////////Spotify
+////////////////////////////////////Spotify/////////////////////////////////
 function spotifySong(arg) {
   spotify.search({ type: "track", limit: 1, query: arg }, function(err, data) {
     if (err) {
@@ -56,24 +54,25 @@ function spotifySong(arg) {
 ///////////////////////Concert This
 
 function concert(arguments) {
+  console.log(arguments.toString());
   if (arguments.length < 1) {
     return console.log("No artist, Try Again.");
   }
   axios
     .get(
       "https://rest.bandsintown.com/artists/" +
-        Str.toString() +
+        arguments +
         "/events?app_id=codingbootcamp"
     )
     .then(function(response) {
-      console.log("Here are the events for " + Str);
+      console.log(response);
+      console.log("Here are the events for " + arguments);
       response.data.forEach(function(event) {
-        console.log(Str);
         console.log("Venue:", event.venue.name);
         console.log("Location:", event.venue.city + " " + event.venue.region);
         console.log(
           "Time: ",
-          moment(event.datetime).format("MM/DD/YYYY, h:mm a")
+          moment(event.datetime).format("MM/DD/YYYY, h:mma")
         );
       });
     });
@@ -101,3 +100,48 @@ function movie(arguments) {
       console.log("Actors:", response.data.Actors);
     });
 }
+// var dataArr;
+
+//Dowhatitsaysfunction - reading command from the file
+
+function doWhatItSays() {
+  fs.readFile("./random.txt", "utf8", function(err, data) {
+    if (err) {
+      return console.log(error);
+    }
+    var dataArr = data.split(",");
+
+    var command = dataArr[0];
+    var parameter = dataArr[1];
+    console.log(command);
+    console.log(parameter);
+    if (command === "concert-this") {
+      concert(parameter);
+    }
+  });
+}
+
+//functions - analyze
+//   fs.appendFile("random.txt", "Hello content!", function(err) {
+//     if (err) throw err;
+//     console.log("Saved!");
+//   });
+// }
+
+// var fs = require("fs");
+// var content;
+// // First I want to read the file
+// fs.readFile("./random.txt", "utf8", function (err, data) {
+//   if (err) {
+//     throw err;
+//   }
+//   content = data;
+
+//   // Invoke the next step here however you like
+//   console.log(content); // Put all of the code here (not the best solution)
+//   processFile(); // Or put the next step in a function and invoke it
+// });
+
+// function processFile() {
+//   console.log(content);
+// }
